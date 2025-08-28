@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TE AMO — Corazones cayendo</title>
+  <style>
+    :root{
+      --bg1:#000000;
+      --bg2:#050505;
+      --text:#fff;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      background: linear-gradient(180deg,var(--bg1),var(--bg2));
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    /* Texto central */
+    .wrap{
+      position:relative;
+      z-index:10;
+      text-align:center;
+      padding:2rem;
+      pointer-events:none;
+    }
+    h1{
+      font-size:clamp(3rem,10vw,8rem);
+      margin:0;
+      color:var(--text);
+      letter-spacing:0.04em;
+      text-shadow: 0 0 10px #ff1aff, 0 0 20px #ff1aff, 0 0 40px #ff1aff;
+      transform: translateZ(0);
+      animation: pulse 2s infinite;
+      user-select:none;
+    }
+    h2{
+      font-size:clamp(1.5rem,5vw,2.5rem);
+      margin:0;
+      margin-top:0.5rem;
+      color:var(--text);
+      letter-spacing:0.03em;
+      text-shadow: 0 0 8px #ff1aff, 0 0 16px #ff1aff, 0 0 32px #ff1aff;
+      user-select:none;
+    }
+    @keyframes pulse{
+      0%{transform:scale(1)}
+      50%{transform:scale(1.08)}
+      100%{transform:scale(1)}
+    }
+
+    .hearts {
+      position:fixed;
+      left:0;top:0;right:0;bottom:0;
+      pointer-events:none;
+      overflow:hidden;
+      z-index:0;
+    }
+
+    .heart{
+      position:absolute;
+      font-size:32px;
+      color:#ff1aff;
+      text-shadow: 0 0 5px #ff1aff, 0 0 15px #ff1aff, 0 0 30px #ff1aff;
+      opacity:0.95;
+      will-change: transform, opacity;
+    }
+
+    .heart.blue{
+      color:#1a8cff;
+      text-shadow: 0 0 5px #1a8cff, 0 0 15px #1a8cff, 0 0 30px #1a8cff;
+    }
+
+    @keyframes fall{
+      0%{transform: translateY(-120vh); opacity:0}
+      10%{opacity:1}
+      100%{transform: translateY(120vh); opacity:0}
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .heart{animation:none !important}
+      h1, h2{animation:none}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>TE AMO ❤︎</h1>
+    <h2>muchísimo</h2>
+  </div>
+  <div class="hearts" aria-hidden="true"></div>
+
+  <script>
+    (function(){
+      const container = document.querySelector('.hearts');
+      const maxHearts = 200; // más corazones
+      const spawnInterval = 150; // más rápido
+      let heartsCount = 0;
+      let running = true;
+
+      function rnd(min, max){ return Math.random() * (max - min) + min }
+
+      function makeHeart(){
+        if(!running) return;
+        if(heartsCount >= maxHearts) return;
+
+        const el = document.createElement('div');
+        el.className = 'heart';
+        el.textContent = '❤︎';
+
+        // algunos corazones azules
+        if(Math.random() < 0.25){
+          el.classList.add('blue');
+        }
+
+        // tamaño y posición aleatoria
+        const size = rnd(16, 48);
+        el.style.fontSize = size + 'px';
+        el.style.left = rnd(0, 100) + '%';
+
+        // duración y delay aleatorios
+        const duration = rnd(6, 12);
+        const delay = rnd(0, 3);
+        el.style.animation = `fall ${duration}s linear ${delay}s forwards`;
+
+        container.appendChild(el);
+        heartsCount++;
+
+        const totalTime = (duration + delay) * 1000 + 500;
+        setTimeout(()=>{
+          el.remove(); heartsCount--;
+        }, totalTime);
+      }
+
+      setInterval(()=>{
+        const toCreate = Math.random() < 0.7 ? 2 : 3; // más corazones por ciclo
+        for(let i=0;i<toCreate;i++) makeHeart();
+      }, spawnInterval);
+
+      window.addEventListener('blur', ()=> running=false);
+      window.addEventListener('focus', ()=> running=true);
+
+      for(let i=0;i<20;i++) setTimeout(makeHeart, i*60);
+    })();
+  </script>
+</body>
+</html>
