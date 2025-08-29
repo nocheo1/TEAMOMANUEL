@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Te Amo</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: #000000; /* negro más oscuro */
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    h1 {
+      color: #ff004c;
+      font-size: 80px;
+      font-family: 'Arial Black', sans-serif;
+      text-shadow: 0 0 20px #ff004c, 0 0 40px #ff004c;
+      margin: 0;
+    }
+
+    h2 {
+      color: #ff66a3;
+      font-size: 30px;
+      font-family: 'Arial', sans-serif;
+      margin: 10px 0 0 0;
+      text-shadow: 0 0 10px #ff66a3, 0 0 20px #ff66a3;
+    }
+
+    .heart {
+      position: absolute;
+      top: -10px;
+      font-size: 24px;
+      animation: fall linear forwards;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>TE AMO ❤︎</h1>
+  <h2>muchísimo</h2>
+
+  <script>
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.textContent = Math.random() < 0.7 ? "❤︎" : "💙"; // mayoría rojos, algunos azules
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSi
